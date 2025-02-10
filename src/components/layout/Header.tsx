@@ -158,55 +158,53 @@ export const Header = () => {
           </div>
         </div>
 
-        <nav className="max-w-[1920px] justify-center items-stretch bg-white w-full gap-[145.01px] text-[14px] font-semibold px-[250px] py-[21px] border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full max-md:px-5">
-          <div className="flex min-w-60 items-center text-[#070B18] leading-6 flex-wrap grow shrink w-[1052px] my-auto max-md:max-w-full">
-            <Link
-              to="/"
-              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
-            >
-              Home
-            </Link>
+        <nav className="max-w-[1920px] justify-between items-center bg-white w-full px-[250px] py-[21px] border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full max-md:px-5">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/"
+                className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
+              >
+                Home
+              </Link>
 
-            <MegaMenu title="Domains" items={domainMenuItems} />
-            <MegaMenu title="Hosting" items={hostingMenuItems} />
+              <MegaMenu title="Domains" items={domainMenuItems} />
+              <MegaMenu title="Hosting" items={hostingMenuItems} />
 
-            <Link
-              to="/website-builder"
-              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
-            >
-              Website Builder
-            </Link>
+              <Link
+                to="/website-builder"
+                className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
+              >
+                Website Builder
+              </Link>
 
-            <Link
-              to="/security"
-              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
-            >
-              Web Security
-            </Link>
+              <Link
+                to="/security"
+                className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
+              >
+                Web Security
+              </Link>
 
-            <Link
-              to="/email"
-              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
-            >
-              Email
-            </Link>
+              <Link
+                to="/email"
+                className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
+              >
+                Email
+              </Link>
 
-            <MegaMenu title="Other" items={otherMenuItems} />
-          </div>
+              <MegaMenu title="Other" items={otherMenuItems} />
+            </div>
 
-          <div className="flex flex-col overflow-hidden items-stretch text-[#0E2954] leading-[21px] justify-center">
-            <div className="flex min-h-[21px] items-center justify-center">
-              <div className="self-stretch flex items-center gap-2.5 my-auto">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/f148676c8399c731eb660e3a4dedabfb51e4ef3a853b0c2de5ba9e9c4a8e9bae"
-                  className="aspect-square object-contain w-[18px] self-stretch shrink-0 my-auto"
-                  alt=""
-                />
-                <div className="self-stretch my-auto hover:text-[#4E4FEB] transition-colors cursor-pointer">
-                  Register a New Domain
-                </div>
-              </div>
+            <div className="flex items-center gap-2.5">
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/f148676c8399c731eb660e3a4dedabfb51e4ef3a853b0c2de5ba9e9c4a8e9bae"
+                className="aspect-square object-contain w-[18px]"
+                alt=""
+              />
+              <span className="text-[#0E2954] hover:text-[#4E4FEB] transition-colors cursor-pointer">
+                Register a New Domain
+              </span>
             </div>
           </div>
         </nav>
