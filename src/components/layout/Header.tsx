@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
+import { Globe, Server, Settings, Search } from "lucide-react";
 
 const domainMenuItems = [
   {
@@ -18,6 +19,15 @@ const domainMenuItems = [
       { title: "Domain Protection", url: "/domains/protection" },
       { title: "DNS Management", url: "/domains/dns" },
       { title: "Domain Reseller", url: "/domains/reseller" },
+    ],
+  },
+  {
+    section: "New Extensions",
+    links: [
+      { title: ".dev Domains", url: "/domains/dev" },
+      { title: ".app Domains", url: "/domains/app" },
+      { title: ".tech Domains", url: "/domains/tech" },
+      { title: ".ai Domains", url: "/domains/ai" },
     ],
   },
 ];
@@ -41,6 +51,15 @@ const hostingMenuItems = [
       { title: "Managed Hosting", url: "/hosting/managed" },
     ],
   },
+  {
+    section: "Enterprise Hosting",
+    links: [
+      { title: "High Performance", url: "/hosting/enterprise" },
+      { title: "Custom Solutions", url: "/hosting/custom" },
+      { title: "Database Hosting", url: "/hosting/database" },
+      { title: "Email Hosting", url: "/hosting/email" },
+    ],
+  },
 ];
 
 const otherMenuItems = [
@@ -60,6 +79,15 @@ const otherMenuItems = [
       { title: "Marketing Tools", url: "/marketing" },
       { title: "Developer Tools", url: "/developer" },
       { title: "API Access", url: "/api" },
+    ],
+  },
+  {
+    section: "Support & Help",
+    links: [
+      { title: "Knowledge Base", url: "/support/kb" },
+      { title: "Video Tutorials", url: "/support/tutorials" },
+      { title: "Community Forum", url: "/support/forum" },
+      { title: "Contact Support", url: "/support/contact" },
     ],
   },
 ];
@@ -160,7 +188,7 @@ export const Header = () => {
 
         <nav className="max-w-[1920px] justify-between items-center bg-white w-full px-[250px] py-[21px] border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full max-md:px-5">
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6">
               <Link
                 to="/"
                 className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
@@ -168,8 +196,8 @@ export const Header = () => {
                 Home
               </Link>
 
-              <MegaMenu title="Domains" items={domainMenuItems} />
-              <MegaMenu title="Hosting" items={hostingMenuItems} />
+              <MegaMenu title="Domains" icon={<Globe />} items={domainMenuItems} />
+              <MegaMenu title="Hosting" icon={<Server />} items={hostingMenuItems} />
 
               <Link
                 to="/website-builder"
@@ -192,16 +220,11 @@ export const Header = () => {
                 Email
               </Link>
 
-              <MegaMenu title="Other" items={otherMenuItems} />
+              <MegaMenu title="Other" icon={<Settings />} items={otherMenuItems} />
             </div>
 
             <div className="flex items-center gap-2.5">
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/f148676c8399c731eb660e3a4dedabfb51e4ef3a853b0c2de5ba9e9c4a8e9bae"
-                className="aspect-square object-contain w-[18px]"
-                alt=""
-              />
+              <Search className="w-[18px] h-[18px] text-[#0E2954]" />
               <span className="text-[#0E2954] hover:text-[#4E4FEB] transition-colors cursor-pointer">
                 Register a New Domain
               </span>

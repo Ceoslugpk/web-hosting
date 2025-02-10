@@ -1,23 +1,25 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Globe, Server, Settings } from "lucide-react";
 
 interface MenuItem {
   title: string;
   url: string;
   description?: string;
+  icon?: React.ReactNode;
 }
 
 interface MegaMenuProps {
   title: string;
+  icon?: React.ReactNode;
   items: {
     section: string;
     links: MenuItem[];
   }[];
 }
 
-export const MegaMenu = ({ title, items }: MegaMenuProps) => {
+export const MegaMenu = ({ title, icon, items }: MegaMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,6 +29,7 @@ export const MegaMenu = ({ title, items }: MegaMenuProps) => {
       onMouseLeave={() => setIsOpen(false)}
     >
       <button className="flex items-center gap-2 px-4 py-2 hover:text-[#4E4FEB] transition-colors">
+        {icon && <span className="w-4 h-4">{icon}</span>}
         {title}
         <ChevronDown className="w-4 h-4" />
       </button>
