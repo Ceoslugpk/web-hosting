@@ -1,3 +1,4 @@
+
 interface DomainCardProps {
   icon: string;
   domain: string;
@@ -7,7 +8,7 @@ interface DomainCardProps {
 
 const DomainCard = ({ icon, domain, description, price }: DomainCardProps) => {
   return (
-    <div className="border shadow-[-4px_4px_0px_0px_#EDEDFD] bg-white w-full mx-auto p-[39px] rounded-lg border-[#E3E9ED] max-md:mt-5 max-md:px-5">
+    <div className="border shadow-[-4px_4px_0px_0px_#EDEDFD] hover:shadow-[-2px_2px_0px_0px_#EDEDFD] transition-all bg-white w-full mx-auto p-[39px] rounded-lg border-[#E3E9ED] max-md:mt-5 max-md:px-5 hover:transform hover:scale-105">
       <div className="flex items-stretch gap-2 text-[28px] text-[#0E2954] font-black whitespace-nowrap leading-[42px]">
         <img
           loading="lazy"
@@ -28,7 +29,7 @@ const DomainCard = ({ icon, domain, description, price }: DomainCardProps) => {
           /year
         </div>
       </div>
-      <button className="w-full rounded bg-[#4E4FEB] shadow-[-4px_4px_0px_rgba(237,237,253,1)] border text-sm text-white font-semibold text-center leading-[14px] mt-[27px] py-[15px] border-[rgba(227,233,237,1)]">
+      <button className="w-full rounded bg-[#4E4FEB] hover:bg-[#3a3bdc] transition-all shadow-[-4px_4px_0px_rgba(237,237,253,1)] hover:shadow-[-2px_2px_0px_rgba(237,237,253,1)] border text-sm text-white font-semibold text-center leading-[14px] mt-[27px] py-[15px] border-[rgba(227,233,237,1)]">
         Register Domain
       </button>
     </div>
@@ -67,11 +68,11 @@ export const DomainPricing = () => {
 
   return (
     <section className="bg-[#F6F9FD] flex w-full flex-col items-center justify-center px-20 py-[83px] max-md:max-w-full max-md:px-5">
-      <div className="flex w-full max-w-[1440px] flex-col items-center max-md:max-w-full">
-        <h2 className="text-[#4E4FEB] text-lg font-bold leading-[18px] capitalize">
+      <div className="flex w-full max-w-[1440px] flex-col items-center max-md:max-w-full animate-fade-in">
+        <h2 className="text-[#4E4FEB] text-lg font-bold leading-[18px] capitalize hover:transform hover:scale-105 transition-transform">
           Domain Register
         </h2>
-        <h3 className="text-4xl text-[#0E2954] font-bold text-center capitalize leading-9 mt-[18px] px-[65px] max-md:max-w-full max-md:px-5">
+        <h3 className="text-4xl text-[#0E2954] font-bold text-center capitalize leading-9 mt-[18px] px-[65px] max-md:max-w-full max-md:px-5 hover:transform hover:scale-105 transition-transform">
           Why you need to register a<br />
           domain name.
         </h3>
