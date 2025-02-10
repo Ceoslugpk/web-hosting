@@ -53,40 +53,62 @@ export const DomainPricing = () => {
     {
       icon: "https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/6dfac49067348243f582d270cfa36fbd83b9cfa87614e78c916557fc4ccd3100",
       domain: "net",
-      description:
-        "It's a fantastic alternative to .com – both generic and universal.",
+      description: "It's a fantastic alternative to .com – both generic and universal.",
       price: "$ 14.99",
     },
     {
       icon: "https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/04f21ae0ad5f4b1341d23a57f2a0a62e488292daade3303b4e130dd0b35232cb",
       domain: "online",
-      description:
-        "It's an excellent alternative to .com – versatile and widely accepted.",
+      description: "It's an excellent alternative to .com – versatile and widely accepted.",
       price: "$ 49.99",
+    },
+    {
+      icon: "https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/04f21ae0ad5f4b1341d23a57f2a0a62e488292daade3303b4e130dd0b35232cb",
+      domain: "org",
+      description: "Perfect for organizations and non-profits.",
+      price: "$ 15.99",
+    },
+    {
+      icon: "https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/04f21ae0ad5f4b1341d23a57f2a0a62e488292daade3303b4e130dd0b35232cb",
+      domain: "io",
+      description: "Popular choice for tech startups and developers.",
+      price: "$ 39.99",
+    },
+    {
+      icon: "https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/04f21ae0ad5f4b1341d23a57f2a0a62e488292daade3303b4e130dd0b35232cb",
+      domain: "dev",
+      description: "Showcase your developer identity with a .dev domain.",
+      price: "$ 29.99",
+    },
+    {
+      icon: "https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/04f21ae0ad5f4b1341d23a57f2a0a62e488292daade3303b4e130dd0b35232cb",
+      domain: "app",
+      description: "Perfect for mobile and web applications.",
+      price: "$ 24.99",
     },
   ];
 
   return (
     <section className="bg-[#F6F9FD] flex w-full flex-col items-center justify-center px-20 py-[83px] max-md:max-w-full max-md:px-5">
       <div className="flex w-full max-w-[1440px] flex-col items-center max-md:max-w-full animate-fade-in">
-        <h2 className="text-[#4E4FEB] text-lg font-bold leading-[18px] capitalize hover:transform hover:scale-105 transition-transform">
+        <h2 className="text-[#4E4FEB] text-lg font-bold leading-[18px] capitalize hover:scale-105 transition-transform">
           Domain Register
         </h2>
-        <h3 className="text-4xl text-[#0E2954] font-bold text-center capitalize leading-9 mt-[18px] px-[65px] max-md:max-w-full max-md:px-5 hover:transform hover:scale-105 transition-transform">
+        <h3 className="text-4xl text-[#0E2954] font-bold text-center capitalize leading-9 mt-[18px] px-[65px] max-md:max-w-full max-md:px-5 hover:scale-105 transition-transform">
           Why you need to register a<br />
           domain name.
         </h3>
         <p className="text-[#2D5087] text-center text-base font-normal leading-6 mt-[26px] max-md:max-w-full">
-          The ideal domain instantly conveys your online purpose and uniqueness.
-          Use our
+          The ideal domain instantly conveys your online purpose and uniqueness. Use our
           <br />
-          domain search tool to find the perfect match and attract more visitors
-          today.
+          domain search tool to find the perfect match and attract more visitors today.
         </p>
 
         <div className="grid grid-cols-4 gap-5 w-full mt-[57px] max-md:grid-cols-1 max-md:mt-10">
           {domains.map((domain, index) => (
-            <DomainCard key={index} {...domain} />
+            <div key={index} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+              <DomainCard {...domain} />
+            </div>
           ))}
         </div>
       </div>

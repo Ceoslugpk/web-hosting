@@ -3,6 +3,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { DomainPricing } from "@/components/sections/DomainPricing";
+import { HostingFeatures } from "@/components/sections/HostingFeatures";
 
 const Index = () => {
   return (
@@ -11,7 +12,7 @@ const Index = () => {
       <main>
         <Hero />
         <DomainPricing />
-        {/* Additional sections will be added here */}
+        <HostingFeatures />
       </main>
       <Footer />
     </div>

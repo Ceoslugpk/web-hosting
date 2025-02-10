@@ -1,9 +1,73 @@
 import { Link } from "react-router-dom";
+import { MegaMenu } from "../navigation/MegaMenu";
+
+const domainMenuItems = [
+  {
+    section: "Popular Domains",
+    links: [
+      { title: ".com Domains", url: "/domains/com" },
+      { title: ".net Domains", url: "/domains/net" },
+      { title: ".org Domains", url: "/domains/org" },
+      { title: ".io Domains", url: "/domains/io" },
+    ],
+  },
+  {
+    section: "Domain Services",
+    links: [
+      { title: "Domain Transfer", url: "/domains/transfer" },
+      { title: "Domain Protection", url: "/domains/protection" },
+      { title: "DNS Management", url: "/domains/dns" },
+      { title: "Domain Reseller", url: "/domains/reseller" },
+    ],
+  },
+];
+
+const hostingMenuItems = [
+  {
+    section: "Web Hosting",
+    links: [
+      { title: "Shared Hosting", url: "/hosting/shared" },
+      { title: "VPS Hosting", url: "/hosting/vps" },
+      { title: "Dedicated Servers", url: "/hosting/dedicated" },
+      { title: "WordPress Hosting", url: "/hosting/wordpress" },
+    ],
+  },
+  {
+    section: "Specialized Solutions",
+    links: [
+      { title: "Business Hosting", url: "/hosting/business" },
+      { title: "Cloud Hosting", url: "/hosting/cloud" },
+      { title: "Reseller Hosting", url: "/hosting/reseller" },
+      { title: "Managed Hosting", url: "/hosting/managed" },
+    ],
+  },
+];
+
+const otherMenuItems = [
+  {
+    section: "Additional Services",
+    links: [
+      { title: "SSL Certificates", url: "/ssl" },
+      { title: "Site Backup", url: "/backup" },
+      { title: "CDN Service", url: "/cdn" },
+      { title: "Migration Service", url: "/migration" },
+    ],
+  },
+  {
+    section: "Tools & Resources",
+    links: [
+      { title: "Website Analytics", url: "/analytics" },
+      { title: "Marketing Tools", url: "/marketing" },
+      { title: "Developer Tools", url: "/developer" },
+      { title: "API Access", url: "/api" },
+    ],
+  },
+];
 
 export const Header = () => {
   return (
-    <header className="flex flex-col items-stretch">
-      <div className="flex w-full flex-col items-center max-md:max-w-full">
+    <header className="flex flex-col items-stretch animate-fade-in">
+      <div className="flex flex-col w-full items-center max-md:max-w-full">
         <div className="max-w-[1920px] justify-center items-stretch bg-[#4E4FEB] min-h-[43px] w-full gap-[418.75px] text-[14px] text-white leading-[21px] pl-[250px] pr-[240px] py-[1px] border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full max-md:px-5">
           <div className="flex min-w-60 flex-col overflow-hidden items-stretch font-medium justify-center">
             <div className="flex min-h-[21px] items-center gap-2.5">
@@ -98,68 +162,36 @@ export const Header = () => {
           <div className="flex min-w-60 items-center text-[#070B18] leading-6 flex-wrap grow shrink w-[1052px] my-auto max-md:max-w-full">
             <Link
               to="/"
-              className="self-stretch flex flex-col items-stretch whitespace-nowrap justify-center my-auto px-4 py-px"
+              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
             >
-              <div className="rounded">Home</div>
+              Home
             </Link>
 
-            <div className="self-stretch flex flex-col items-stretch whitespace-nowrap justify-center w-28 my-auto px-4 py-px">
-              <div className="rounded relative flex w-full gap-[9px] pr-5">
-                <div className="z-0">Domains</div>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/4cf479394c56328a66f8ea2cc99e4e07b2079a3c745fbde360ed688ab582e43c"
-                  className="aspect-square object-contain w-2.5 absolute z-0 shrink-0 h-2.5 right-px top-1"
-                  alt=""
-                />
-              </div>
-            </div>
-
-            {/* Additional navigation items */}
-            <div className="self-stretch flex flex-col items-stretch whitespace-nowrap justify-center w-[105px] my-auto px-4 py-px">
-              <div className="rounded relative flex w-full gap-[9px] pr-5">
-                <div className="z-0">Hosting</div>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/318457fa4e9448b9105e0d8dbb60e4d7a1cbc04a0e225e0033bbdf6976441fb3"
-                  className="aspect-square object-contain w-2.5 absolute z-0 shrink-0 h-2.5 right-px top-1"
-                  alt=""
-                />
-              </div>
-            </div>
+            <MegaMenu title="Domains" items={domainMenuItems} />
+            <MegaMenu title="Hosting" items={hostingMenuItems} />
 
             <Link
               to="/website-builder"
-              className="self-stretch flex flex-col items-stretch justify-center my-auto px-4 py-px"
+              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
             >
-              <div className="rounded">Website Builder</div>
+              Website Builder
             </Link>
 
             <Link
               to="/security"
-              className="self-stretch flex flex-col items-stretch justify-center my-auto px-4 py-px"
+              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
             >
-              <div className="rounded">Web Security</div>
+              Web Security
             </Link>
 
             <Link
               to="/email"
-              className="self-stretch flex flex-col items-stretch whitespace-nowrap justify-center my-auto px-4 py-px"
+              className="hover:text-[#4E4FEB] transition-colors px-4 py-2"
             >
-              <div className="rounded">Email</div>
+              Email
             </Link>
 
-            <div className="self-stretch flex flex-col items-stretch whitespace-nowrap justify-center w-[91px] my-auto px-4 py-px">
-              <div className="rounded relative flex w-full gap-[9px] pr-5">
-                <div className="z-0">Other</div>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/c1ab25efdf9c8fdff3af5cafc5388e5178488699763d8ec8093cf08fc2827c8d"
-                  className="aspect-square object-contain w-2.5 absolute z-0 shrink-0 h-2.5 right-px top-1"
-                  alt=""
-                />
-              </div>
-            </div>
+            <MegaMenu title="Other" items={otherMenuItems} />
           </div>
 
           <div className="flex flex-col overflow-hidden items-stretch text-[#0E2954] leading-[21px] justify-center">
@@ -171,7 +203,7 @@ export const Header = () => {
                   className="aspect-square object-contain w-[18px] self-stretch shrink-0 my-auto"
                   alt=""
                 />
-                <div className="self-stretch my-auto">
+                <div className="self-stretch my-auto hover:text-[#4E4FEB] transition-colors cursor-pointer">
                   Register a New Domain
                 </div>
               </div>
