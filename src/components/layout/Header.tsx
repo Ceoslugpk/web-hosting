@@ -1,6 +1,19 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
-import { Globe, Server, Settings, Search } from "lucide-react";
+import { 
+  Globe, 
+  Server, 
+  Settings, 
+  Search,
+  Home,
+  Layout,
+  Shield,
+  Mail,
+  Info,
+  Phone,
+  FileSearch
+} from "lucide-react";
+
 const domainMenuItems = [{
   section: "Popular Domains",
   links: [{
@@ -139,6 +152,7 @@ const otherMenuItems = [{
     url: "/support/contact"
   }]
 }];
+
 export const Header = () => {
   return <header className="flex flex-col items-stretch animate-fade-in">
       <div className="flex flex-col w-full items-center max-md:max-w-full">
@@ -198,26 +212,45 @@ export const Header = () => {
         <nav className="max-w-[1920px] justify-between items-center bg-white w-full border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full mx-0 py-[5px] px-[132px]">
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-8">
-              <Link to="/" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
-                Home
+              <Link to="/" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Home className="w-5 h-5" />
+                <span>Home</span>
               </Link>
 
-              <MegaMenu title="Domains" icon={<Globe className="mr-2" />} items={domainMenuItems} />
-              <MegaMenu title="Hosting" icon={<Server className="mr-2" />} items={hostingMenuItems} />
+              <MegaMenu title="Domains" icon={<Globe className="w-5 h-5" />} items={domainMenuItems} />
+              <MegaMenu title="Hosting" icon={<Server className="w-5 h-5" />} items={hostingMenuItems} />
 
-              <Link to="/website-builder" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
-                Website Builder
+              <Link to="/website-builder" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Layout className="w-5 h-5" />
+                <span>Website Builder</span>
               </Link>
 
-              <Link to="/security" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
-                Web Security
+              <Link to="/security" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Shield className="w-5 h-5" />
+                <span>Web Security</span>
               </Link>
 
-              <Link to="/email" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
-                Email
+              <Link to="/email" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Mail className="w-5 h-5" />
+                <span>Email</span>
               </Link>
 
-              <MegaMenu title="Other" icon={<Settings className="mr-2" />} items={otherMenuItems} />
+              <MegaMenu title="Other" icon={<Settings className="w-5 h-5" />} items={otherMenuItems} />
+
+              <Link to="/about" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                <span>About Us</span>
+              </Link>
+
+              <Link to="/contact" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Phone className="w-5 h-5" />
+                <span>Contact Us</span>
+              </Link>
+
+              <Link to="/whois" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <FileSearch className="w-5 h-5" />
+                <span>Whois Lookup</span>
+              </Link>
             </div>
 
             <div className="flex items-center gap-4">
