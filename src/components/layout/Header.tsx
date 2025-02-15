@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
 import { Globe, Server, Settings, Search } from "lucide-react";
+
 const domainMenuItems = [{
   section: "Popular Domains",
   links: [{
@@ -139,6 +140,7 @@ const otherMenuItems = [{
     url: "/support/contact"
   }]
 }];
+
 export const Header = () => {
   return <header className="flex flex-col items-stretch animate-fade-in">
       <div className="flex flex-col w-full items-center max-md:max-w-full">
@@ -197,13 +199,13 @@ export const Header = () => {
 
         <nav className="max-w-[1920px] justify-between items-center bg-white w-full border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full px-[81px] py-[10px]">
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center gap-8">
               <Link to="/" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
                 Home
               </Link>
 
-              <MegaMenu title="Domains" icon={<Globe />} items={domainMenuItems} />
-              <MegaMenu title="Hosting" icon={<Server />} items={hostingMenuItems} />
+              <MegaMenu title="Domains" icon={<Globe className="mr-2" />} items={domainMenuItems} />
+              <MegaMenu title="Hosting" icon={<Server className="mr-2" />} items={hostingMenuItems} />
 
               <Link to="/website-builder" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
                 Website Builder
@@ -217,10 +219,10 @@ export const Header = () => {
                 Email
               </Link>
 
-              <MegaMenu title="Other" icon={<Settings />} items={otherMenuItems} />
+              <MegaMenu title="Other" icon={<Settings className="mr-2" />} items={otherMenuItems} />
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-4">
               <Search className="w-[18px] h-[18px] text-[#0E2954]" />
               <span className="text-[#0E2954] hover:text-[#4E4FEB] transition-colors cursor-pointer">
                 Register a New Domain
