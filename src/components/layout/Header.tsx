@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
 import { Globe, Server, Settings, Search } from "lucide-react";
-
 const domainMenuItems = [{
   section: "Popular Domains",
   links: [{
@@ -48,7 +47,6 @@ const domainMenuItems = [{
     url: "/domains/ai"
   }]
 }];
-
 const hostingMenuItems = [{
   section: "Web Hosting",
   links: [{
@@ -95,7 +93,6 @@ const hostingMenuItems = [{
     url: "/hosting/email"
   }]
 }];
-
 const otherMenuItems = [{
   section: "Additional Services",
   links: [{
@@ -142,7 +139,6 @@ const otherMenuItems = [{
     url: "/support/contact"
   }]
 }];
-
 export const Header = () => {
   return <header className="flex flex-col items-stretch animate-fade-in">
       <div className="flex flex-col w-full items-center max-md:max-w-full">
@@ -199,7 +195,7 @@ export const Header = () => {
           </div>
         </div>
 
-        <nav className="max-w-[1920px] justify-between items-center bg-white w-full px-[250px] py-[21px] border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full max-md:px-5">
+        <nav className="max-w-[1920px] justify-between items-center bg-white w-full border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full py-0 px-[80px]">
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center space-x-6">
               <Link to="/" className="hover:text-[#4E4FEB] transition-colors px-4 py-2">
