@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
 import { Globe, Server, Settings, Search } from "lucide-react";
+
 const domainMenuItems = [{
   section: "Popular Domains",
   links: [{
@@ -139,6 +140,7 @@ const otherMenuItems = [{
     url: "/support/contact"
   }]
 }];
+
 export const Header = () => {
   return <header className="flex flex-col items-stretch animate-fade-in">
       <div className="flex flex-col w-full items-center max-md:max-w-full">
