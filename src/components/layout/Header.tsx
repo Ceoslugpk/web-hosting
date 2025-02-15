@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
 import { Globe, Server, Settings, Search } from "lucide-react";
+
 const domainMenuItems = [{
   section: "Popular Domains",
   links: [{
@@ -47,6 +48,7 @@ const domainMenuItems = [{
     url: "/domains/ai"
   }]
 }];
+
 const hostingMenuItems = [{
   section: "Web Hosting",
   links: [{
@@ -93,6 +95,7 @@ const hostingMenuItems = [{
     url: "/hosting/email"
   }]
 }];
+
 const otherMenuItems = [{
   section: "Additional Services",
   links: [{
@@ -139,32 +142,20 @@ const otherMenuItems = [{
     url: "/support/contact"
   }]
 }];
+
 export const Header = () => {
   return <header className="flex flex-col items-stretch animate-fade-in">
       <div className="flex flex-col w-full items-center max-md:max-w-full">
-        <div className="max-w-[1920px] justify-center items-stretch bg-[#4E4FEB] min-h-[43px] w-full gap-[418.75px] text-[14px] text-white leading-[21px] pl-[250px] pr-[240px] border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full px-[60px] py-0 rounded-none">
-          <div className="flex min-w-60 flex-col overflow-hidden items-stretch font-medium justify-center">
-            <div className="flex min-h-[21px] items-center gap-2.5">
-              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/69b895529e24bf63369a6f1bd52e7cdcba90f0cc78cba1f99879f757cd256e70" className="aspect-square object-contain w-5 self-stretch shrink-0 my-auto" alt="" />
-              <div className="self-stretch my-auto">
-                50 GB plan with free matching domain.
-              </div>
-            </div>
+        <div className="max-w-[1920px] w-full bg-[#4E4FEB] min-h-[43px] flex items-center justify-between text-white text-sm leading-[21px] px-4 sm:px-6 lg:px-8 xl:px-[250px] py-2 border-y border-[rgba(20,19,19,0.07)]">
+          <div className="flex items-center gap-2.5 font-medium">
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/69b895529e24bf63369a6f1bd52e7cdcba90f0cc78cba1f99879f757cd256e70" className="aspect-square object-contain w-5" alt="" />
+            <span className="whitespace-nowrap">50 GB plan with free matching domain.</span>
           </div>
-          <nav className="items-stretch bg-[#4E4FEB] flex min-w-60 font-semibold whitespace-nowrap h-full flex-1 shrink basis-0 p-2.5 max-md:max-w-full">
-            <div className="w-[198px] overflow-hidden">
-              <div className="flex w-full items-stretch gap-6 flex-wrap pr-3">
-                <Link to="/about" className="flex items-center justify-center h-full">
-                  <div className="self-stretch my-auto">About</div>
-                </Link>
-                <Link to="/contact" className="flex items-center justify-center h-full">
-                  <div className="self-stretch my-auto">Contact</div>
-                </Link>
-                <Link to="/sitemap" className="flex items-center justify-center h-full">
-                  <div className="self-stretch my-auto">Sitemap</div>
-                </Link>
-              </div>
-            </div>
+          
+          <nav className="hidden sm:flex items-center space-x-6 font-semibold">
+            <Link to="/about" className="hover:text-opacity-80 transition-colors">About</Link>
+            <Link to="/contact" className="hover:text-opacity-80 transition-colors">Contact</Link>
+            <Link to="/sitemap" className="hover:text-opacity-80 transition-colors">Sitemap</Link>
           </nav>
         </div>
 
