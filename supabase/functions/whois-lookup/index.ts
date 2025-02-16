@@ -15,7 +15,7 @@ serve(async (req) => {
 
   try {
     const { domain } = await req.json()
-    const apiKey = Deno.env.get('WHOISFREAKS_API_KEY') // Updated to use new env variable name
+    const apiKey = Deno.env.get('WHOISXML_API_KEY')
 
     if (!domain) {
       return new Response(
@@ -28,47 +28,19 @@ serve(async (req) => {
     }
 
     console.log(`Starting WHOIS lookup for domain: ${domain}`)
-    const apiUrl = `https://api.whoisfreaks.com/v1.0/whois?apiKey=${apiKey}&whois=live&domainName=${domain}`
+    const apiUrl = `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${apiKey}&domainName=${domain}&outputFormat=JSON`
     
     const response = await fetch(apiUrl)
     if (!response.ok) {
-      console.error(`WhoisFreaks API error: ${response.status} ${response.statusText}`)
+      console.error(`WhoisXML API error: ${response.status} ${response.statusText}`)
       throw new Error('WHOIS API request failed')
     }
     
     const data = await response.json()
     console.log('WHOIS API response received successfully')
     
-    // Transform WhoisFreaks response to match our existing frontend structure
-    const transformedData = {
-      WhoisRecord: {
-        domainName: data.domain_name,
-        status: Array.isArray(data.domain_status) ? data.domain_status.join(', ') : data.domain_status,
-        createdDate: data.create_date,
-        updatedDate: data.update_date,
-        expiresDate: data.expiry_date,
-        registrar: {
-          name: data.registrar?.registrar_name,
-          ianaId: data.registrar?.registrar_iana_id,
-          url: data.registrar?.registrar_url,
-          email: data.registrar?.registrar_email,
-          phone: data.registrar?.registrar_phone
-        },
-        registryData: {
-          nameServers: {
-            hostNames: Array.isArray(data.name_servers) ? data.name_servers : [data.name_servers]
-          }
-        },
-        administrativeContact: data.administrative_contact ? {
-          organization: data.administrative_contact.organization,
-          state: data.administrative_contact.state_province,
-          country: data.administrative_contact.country
-        } : null
-      }
-    }
-    
     return new Response(
-      JSON.stringify(transformedData),
+      JSON.stringify(data),
       { 
         headers: { 
           ...corsHeaders, 
