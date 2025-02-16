@@ -19,16 +19,25 @@ const Whois = () => {
     }
 
     setLoading(true);
+    setWhoisData(null);
+    
     try {
+      console.log('Invoking whois-lookup function...');
       const { data, error } = await supabase.functions.invoke('whois-lookup', {
         body: { domain }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      console.log('WHOIS data received:', data);
       setWhoisData(data);
-    } catch (error) {
+      toast.success("WHOIS information retrieved successfully");
+    } catch (error: any) {
       console.error('Error fetching WHOIS data:', error);
-      toast.error("Failed to fetch WHOIS information");
+      toast.error(error.message || "Failed to fetch WHOIS information");
     } finally {
       setLoading(false);
     }

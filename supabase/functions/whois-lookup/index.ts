@@ -4,6 +4,7 @@ import { serve } from "https://deno.fresh.run/std@0.168.0/http/server.ts"
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
 }
 
 serve(async (req) => {
@@ -26,21 +27,31 @@ serve(async (req) => {
       )
     }
 
+    console.log(`Starting WHOIS lookup for domain: ${domain}`)
     const apiUrl = `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${apiKey}&domainName=${domain}&outputFormat=JSON`
     
-    console.log(`Fetching WHOIS data for domain: ${domain}`)
     const response = await fetch(apiUrl)
-    const data = await response.json()
+    if (!response.ok) {
+      console.error(`WhoisXML API error: ${response.status} ${response.statusText}`)
+      throw new Error('WHOIS API request failed')
+    }
     
-    console.log('WHOIS API response received')
+    const data = await response.json()
+    console.log('WHOIS API response received successfully')
+    
     return new Response(
       JSON.stringify(data),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        } 
+      }
     )
   } catch (error) {
     console.error('Error in WHOIS lookup:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to fetch WHOIS data' }),
+      JSON.stringify({ error: 'Failed to fetch WHOIS data', details: error.message }),
       { 
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
