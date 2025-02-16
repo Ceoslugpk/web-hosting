@@ -15,7 +15,7 @@ serve(async (req) => {
 
   try {
     const { domain } = await req.json()
-    const apiKey = Deno.env.get('WHOISXML_API_KEY') // We'll keep using the same env variable name
+    const apiKey = Deno.env.get('WHOISFREAKS_API_KEY') // Updated to use new env variable name
 
     if (!domain) {
       return new Response(
