@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Search, FileSearch, Loader2 } from "lucide-react";
+import { Search, FileSearch, Loader2, Globe, Building2, Server, Shield, Calendar, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Whois = () => {
   const [domain, setDomain] = useState("");
@@ -41,6 +42,15 @@ const Whois = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -96,38 +106,82 @@ const Whois = () => {
                   </p>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className="grid gap-6">
                   <h2 className="text-2xl font-semibold text-[#0E2954] mb-4">WHOIS Information</h2>
-                  {whoisData.WhoisRecord && (
-                    <div className="grid gap-6 text-[#2D5087]">
-                      <div>
-                        <h3 className="font-semibold mb-2">Domain Information</h3>
-                        <p>Domain Name: {whoisData.WhoisRecord.domainName}</p>
-                        <p>Created Date: {whoisData.WhoisRecord.createdDate}</p>
-                        <p>Updated Date: {whoisData.WhoisRecord.updatedDate}</p>
-                        <p>Expiration Date: {whoisData.WhoisRecord.expiresDate}</p>
-                      </div>
-                      
-                      {whoisData.WhoisRecord.registrar && (
-                        <div>
-                          <h3 className="font-semibold mb-2">Registrar Information</h3>
-                          <p>Registrar: {whoisData.WhoisRecord.registrar?.name}</p>
-                          <p>IANA ID: {whoisData.WhoisRecord.registrar?.ianaId}</p>
-                        </div>
-                      )}
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Domain Information */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Globe className="w-5 h-5 text-[#4E4FEB]" />
+                          Domain Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p><span className="font-medium">Domain Name:</span> {whoisData.WhoisRecord.domainName}</p>
+                        <p><span className="font-medium">Status:</span> {whoisData.WhoisRecord.status || 'Active'}</p>
+                        <p><span className="font-medium">Created:</span> {formatDate(whoisData.WhoisRecord.createdDate)}</p>
+                        <p><span className="font-medium">Updated:</span> {formatDate(whoisData.WhoisRecord.updatedDate)}</p>
+                        <p><span className="font-medium">Expires:</span> {formatDate(whoisData.WhoisRecord.expiresDate)}</p>
+                      </CardContent>
+                    </Card>
 
-                      {whoisData.WhoisRecord.registryData?.nameServers?.hostNames && (
-                        <div>
-                          <h3 className="font-semibold mb-2">Name Servers</h3>
-                          <ul className="list-disc list-inside">
-                            {whoisData.WhoisRecord.registryData.nameServers.hostNames.map((ns: string, index: number) => (
-                              <li key={index}>{ns}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    {/* Registrar Information */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Building2 className="w-5 h-5 text-[#4E4FEB]" />
+                          Registrar Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p><span className="font-medium">Registrar:</span> {whoisData.WhoisRecord.registrar?.name || 'N/A'}</p>
+                        <p><span className="font-medium">IANA ID:</span> {whoisData.WhoisRecord.registrar?.ianaId || 'N/A'}</p>
+                        <p><span className="font-medium">URL:</span> {whoisData.WhoisRecord.registrar?.url || 'N/A'}</p>
+                        <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.registrar?.email || 'N/A'}</p>
+                        <p><span className="font-medium">Phone:</span> {whoisData.WhoisRecord.registrar?.phone || 'N/A'}</p>
+                      </CardContent>
+                    </Card>
+
+                    {/* Name Servers */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Server className="w-5 h-5 text-[#4E4FEB]" />
+                          Name Servers
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-1">
+                          {whoisData.WhoisRecord.registryData?.nameServers?.hostNames?.map((ns: string, index: number) => (
+                            <li key={index} className="text-[#2D5087]">{ns}</li>
+                          )) || 'No nameservers found'}
+                        </ul>
+                      </CardContent>
+                    </Card>
+
+                    {/* Administrative Contact */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <User className="w-5 h-5 text-[#4E4FEB]" />
+                          Contact Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        {whoisData.WhoisRecord.administrativeContact ? (
+                          <>
+                            <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.administrativeContact.organization || 'N/A'}</p>
+                            <p><span className="font-medium">State/Province:</span> {whoisData.WhoisRecord.administrativeContact.state || 'N/A'}</p>
+                            <p><span className="font-medium">Country:</span> {whoisData.WhoisRecord.administrativeContact.country || 'N/A'}</p>
+                          </>
+                        ) : (
+                          <p className="text-gray-500">Contact information is private or not available</p>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               )}
             </div>
