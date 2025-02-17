@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Search, FileSearch, Loader2, Globe, Building2, Server, Shield, Calendar, User } from "lucide-react";
+import { Search, FileSearch, Loader2, Globe, Building2, Server, Shield, Calendar, User, Mail, Phone, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,7 +109,7 @@ const Whois = () => {
                 <div className="grid gap-6">
                   <h2 className="text-2xl font-semibold text-[#0E2954] mb-4">WHOIS Information</h2>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Domain Information */}
                     <Card>
                       <CardHeader>
@@ -124,6 +124,8 @@ const Whois = () => {
                         <p><span className="font-medium">Created:</span> {formatDate(whoisData.WhoisRecord.createdDate)}</p>
                         <p><span className="font-medium">Updated:</span> {formatDate(whoisData.WhoisRecord.updatedDate)}</p>
                         <p><span className="font-medium">Expires:</span> {formatDate(whoisData.WhoisRecord.expiresDate)}</p>
+                        <p><span className="font-medium">Domain Age:</span> {whoisData.WhoisRecord.domain_age || 'N/A'}</p>
+                        <p><span className="font-medium">Grace Period:</span> {whoisData.WhoisRecord.domain_grace_period || 'N/A'}</p>
                       </CardContent>
                     </Card>
 
@@ -166,7 +168,7 @@ const Whois = () => {
                       <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                           <User className="w-5 h-5 text-[#4E4FEB]" />
-                          Contact Information
+                          Administrative Contact
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
@@ -175,10 +177,68 @@ const Whois = () => {
                             <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.administrativeContact.organization || 'N/A'}</p>
                             <p><span className="font-medium">State/Province:</span> {whoisData.WhoisRecord.administrativeContact.state || 'N/A'}</p>
                             <p><span className="font-medium">Country:</span> {whoisData.WhoisRecord.administrativeContact.country || 'N/A'}</p>
+                            <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.administrativeContact.email || 'N/A'}</p>
+                            <p><span className="font-medium">Phone:</span> {whoisData.WhoisRecord.administrativeContact.phone || 'N/A'}</p>
                           </>
                         ) : (
                           <p className="text-gray-500">Contact information is private or not available</p>
                         )}
+                      </CardContent>
+                    </Card>
+
+                    {/* Technical Contact */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Phone className="w-5 h-5 text-[#4E4FEB]" />
+                          Technical Contact
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        {whoisData.WhoisRecord.technicalContact ? (
+                          <>
+                            <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.technicalContact.organization || 'N/A'}</p>
+                            <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.technicalContact.email || 'N/A'}</p>
+                            <p><span className="font-medium">Phone:</span> {whoisData.WhoisRecord.technicalContact.phone || 'N/A'}</p>
+                          </>
+                        ) : (
+                          <p className="text-gray-500">Technical contact information is private or not available</p>
+                        )}
+                      </CardContent>
+                    </Card>
+
+                    {/* Registrant Information */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Mail className="w-5 h-5 text-[#4E4FEB]" />
+                          Registrant Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        {whoisData.WhoisRecord.registrant ? (
+                          <>
+                            <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.registrant.organization || 'N/A'}</p>
+                            <p><span className="font-medium">Country:</span> {whoisData.WhoisRecord.registrant.country || 'N/A'}</p>
+                            <p><span className="font-medium">State/Province:</span> {whoisData.WhoisRecord.registrant.state || 'N/A'}</p>
+                            <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.registrant.email || 'N/A'}</p>
+                          </>
+                        ) : (
+                          <p className="text-gray-500">Registrant information is private or not available</p>
+                        )}
+                      </CardContent>
+                    </Card>
+
+                    {/* DNSSEC Information */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Lock className="w-5 h-5 text-[#4E4FEB]" />
+                          DNSSEC Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p><span className="font-medium">DNSSEC:</span> {whoisData.WhoisRecord.dnssec || 'Not specified'}</p>
                       </CardContent>
                     </Card>
                   </div>
