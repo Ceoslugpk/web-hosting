@@ -45,12 +45,23 @@ const Whois = () => {
   };
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    if (!dateString) return '-';
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return '-';
+    }
+  };
+
+  const getValueOrDash = (value: any): string => {
+    if (value === null || value === undefined || value === '') {
+      return '-';
+    }
+    return String(value);
   };
 
   return (
@@ -119,13 +130,13 @@ const Whois = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        <p><span className="font-medium">Domain Name:</span> {whoisData.WhoisRecord.domainName}</p>
-                        <p><span className="font-medium">Status:</span> {whoisData.WhoisRecord.status || 'Active'}</p>
+                        <p><span className="font-medium">Domain Name:</span> {getValueOrDash(whoisData.WhoisRecord.domainName)}</p>
+                        <p><span className="font-medium">Status:</span> {getValueOrDash(whoisData.WhoisRecord.status)}</p>
                         <p><span className="font-medium">Created:</span> {formatDate(whoisData.WhoisRecord.createdDate)}</p>
                         <p><span className="font-medium">Updated:</span> {formatDate(whoisData.WhoisRecord.updatedDate)}</p>
                         <p><span className="font-medium">Expires:</span> {formatDate(whoisData.WhoisRecord.expiresDate)}</p>
-                        <p><span className="font-medium">Domain Age:</span> {whoisData.WhoisRecord.domain_age || 'N/A'}</p>
-                        <p><span className="font-medium">Grace Period:</span> {whoisData.WhoisRecord.domain_grace_period || 'N/A'}</p>
+                        <p><span className="font-medium">Domain Age:</span> {getValueOrDash(whoisData.WhoisRecord.domain_age)}</p>
+                        <p><span className="font-medium">Grace Period:</span> {getValueOrDash(whoisData.WhoisRecord.domain_grace_period)}</p>
                       </CardContent>
                     </Card>
 
@@ -138,11 +149,11 @@ const Whois = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        <p><span className="font-medium">Registrar:</span> {whoisData.WhoisRecord.registrar?.name || 'N/A'}</p>
-                        <p><span className="font-medium">IANA ID:</span> {whoisData.WhoisRecord.registrar?.ianaId || 'N/A'}</p>
-                        <p><span className="font-medium">URL:</span> {whoisData.WhoisRecord.registrar?.url || 'N/A'}</p>
-                        <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.registrar?.email || 'N/A'}</p>
-                        <p><span className="font-medium">Phone:</span> {whoisData.WhoisRecord.registrar?.phone || 'N/A'}</p>
+                        <p><span className="font-medium">Registrar:</span> {getValueOrDash(whoisData.WhoisRecord.registrar?.name)}</p>
+                        <p><span className="font-medium">IANA ID:</span> {getValueOrDash(whoisData.WhoisRecord.registrar?.ianaId)}</p>
+                        <p><span className="font-medium">URL:</span> {getValueOrDash(whoisData.WhoisRecord.registrar?.url)}</p>
+                        <p><span className="font-medium">Email:</span> {getValueOrDash(whoisData.WhoisRecord.registrar?.email)}</p>
+                        <p><span className="font-medium">Phone:</span> {getValueOrDash(whoisData.WhoisRecord.registrar?.phone)}</p>
                       </CardContent>
                     </Card>
 
@@ -156,9 +167,9 @@ const Whois = () => {
                       </CardHeader>
                       <CardContent>
                         <ul className="space-y-1">
-                          {whoisData.WhoisRecord.registryData?.nameServers?.hostNames?.map((ns: string, index: number) => (
+                          {whoisData.WhoisRecord.registryData?.nameServers?.hostNames?.filter(Boolean).map((ns: string, index: number) => (
                             <li key={index} className="text-[#2D5087]">{ns}</li>
-                          )) || 'No nameservers found'}
+                          )) || <li>-</li>}
                         </ul>
                       </CardContent>
                     </Card>
@@ -172,16 +183,18 @@ const Whois = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        {whoisData.WhoisRecord.administrativeContact ? (
-                          <>
-                            <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.administrativeContact.organization || 'N/A'}</p>
-                            <p><span className="font-medium">State/Province:</span> {whoisData.WhoisRecord.administrativeContact.state || 'N/A'}</p>
-                            <p><span className="font-medium">Country:</span> {whoisData.WhoisRecord.administrativeContact.country || 'N/A'}</p>
-                            <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.administrativeContact.email || 'N/A'}</p>
-                            <p><span className="font-medium">Phone:</span> {whoisData.WhoisRecord.administrativeContact.phone || 'N/A'}</p>
-                          </>
-                        ) : (
-                          <p className="text-gray-500">Contact information is private or not available</p>
+                        {whoisData.WhoisRecord.administrativeContact && (
+                          Object.keys(whoisData.WhoisRecord.administrativeContact).length > 0 ? (
+                            <>
+                              <p><span className="font-medium">Organization:</span> {getValueOrDash(whoisData.WhoisRecord.administrativeContact.organization)}</p>
+                              <p><span className="font-medium">State/Province:</span> {getValueOrDash(whoisData.WhoisRecord.administrativeContact.state)}</p>
+                              <p><span className="font-medium">Country:</span> {getValueOrDash(whoisData.WhoisRecord.administrativeContact.country)}</p>
+                              <p><span className="font-medium">Email:</span> {getValueOrDash(whoisData.WhoisRecord.administrativeContact.email)}</p>
+                              <p><span className="font-medium">Phone:</span> {getValueOrDash(whoisData.WhoisRecord.administrativeContact.phone)}</p>
+                            </>
+                          ) : (
+                            <p className="text-gray-500">Contact information is private</p>
+                          )
                         )}
                       </CardContent>
                     </Card>
@@ -195,14 +208,16 @@ const Whois = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        {whoisData.WhoisRecord.technicalContact ? (
-                          <>
-                            <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.technicalContact.organization || 'N/A'}</p>
-                            <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.technicalContact.email || 'N/A'}</p>
-                            <p><span className="font-medium">Phone:</span> {whoisData.WhoisRecord.technicalContact.phone || 'N/A'}</p>
-                          </>
-                        ) : (
-                          <p className="text-gray-500">Technical contact information is private or not available</p>
+                        {whoisData.WhoisRecord.technicalContact && (
+                          Object.keys(whoisData.WhoisRecord.technicalContact).length > 0 ? (
+                            <>
+                              <p><span className="font-medium">Organization:</span> {getValueOrDash(whoisData.WhoisRecord.technicalContact.organization)}</p>
+                              <p><span className="font-medium">Email:</span> {getValueOrDash(whoisData.WhoisRecord.technicalContact.email)}</p>
+                              <p><span className="font-medium">Phone:</span> {getValueOrDash(whoisData.WhoisRecord.technicalContact.phone)}</p>
+                            </>
+                          ) : (
+                            <p className="text-gray-500">Technical contact information is private</p>
+                          )
                         )}
                       </CardContent>
                     </Card>
@@ -216,15 +231,17 @@ const Whois = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        {whoisData.WhoisRecord.registrant ? (
-                          <>
-                            <p><span className="font-medium">Organization:</span> {whoisData.WhoisRecord.registrant.organization || 'N/A'}</p>
-                            <p><span className="font-medium">Country:</span> {whoisData.WhoisRecord.registrant.country || 'N/A'}</p>
-                            <p><span className="font-medium">State/Province:</span> {whoisData.WhoisRecord.registrant.state || 'N/A'}</p>
-                            <p><span className="font-medium">Email:</span> {whoisData.WhoisRecord.registrant.email || 'N/A'}</p>
-                          </>
-                        ) : (
-                          <p className="text-gray-500">Registrant information is private or not available</p>
+                        {whoisData.WhoisRecord.registrant && (
+                          Object.keys(whoisData.WhoisRecord.registrant).length > 0 ? (
+                            <>
+                              <p><span className="font-medium">Organization:</span> {getValueOrDash(whoisData.WhoisRecord.registrant.organization)}</p>
+                              <p><span className="font-medium">Country:</span> {getValueOrDash(whoisData.WhoisRecord.registrant.country)}</p>
+                              <p><span className="font-medium">State/Province:</span> {getValueOrDash(whoisData.WhoisRecord.registrant.state)}</p>
+                              <p><span className="font-medium">Email:</span> {getValueOrDash(whoisData.WhoisRecord.registrant.email)}</p>
+                            </>
+                          ) : (
+                            <p className="text-gray-500">Registrant information is private</p>
+                          )
                         )}
                       </CardContent>
                     </Card>
@@ -238,7 +255,7 @@ const Whois = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p><span className="font-medium">DNSSEC:</span> {whoisData.WhoisRecord.dnssec || 'Not specified'}</p>
+                        <p><span className="font-medium">DNSSEC:</span> {getValueOrDash(whoisData.WhoisRecord.dnssec)}</p>
                       </CardContent>
                     </Card>
                   </div>
