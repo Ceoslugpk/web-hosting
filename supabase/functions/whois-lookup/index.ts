@@ -36,6 +36,8 @@ serve(async (req) => {
     const apiUrl = `https://api.apilayer.com/whois/query?domain=${domain}`
     
     console.log('Making request to APILayer...')
+    console.log('APILayer URL:', apiUrl)
+    
     const response = await fetch(apiUrl, {
       headers: {
         'apikey': apiKey
@@ -51,6 +53,7 @@ serve(async (req) => {
     
     const data = await response.json()
     console.log('WHOIS API response received successfully')
+    console.log('API Response data:', JSON.stringify(data, null, 2))
 
     if (!data || typeof data !== 'object') {
       console.error('Invalid response from APILayer:', data)
