@@ -15,7 +15,7 @@ serve(async (req) => {
 
   try {
     const { domain } = await req.json()
-    const apiKey = Deno.env.get('WHOISXML_API_KEY')
+    const apiKey = Deno.env.get('APILAYER_API_KEY')
 
     if (!domain) {
       return new Response(
@@ -28,8 +28,8 @@ serve(async (req) => {
     }
 
     if (!apiKey) {
-      console.error('WHOISXML API key is not configured')
-      throw new Error('WHOISXML API key is not configured')
+      console.error('APILayer API key is not configured')
+      throw new Error('APILayer API key is not configured')
     }
 
     console.log(`Starting WHOIS lookup for domain: ${domain}`)
