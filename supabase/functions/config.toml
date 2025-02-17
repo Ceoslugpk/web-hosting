@@ -1,0 +1,11 @@
+
+# project_id must be the first line of config.toml
+project_id = "qqvrfirzbarsfhclbmdu"
+
+[global]
+app_version = "v1.0.0"
+
+[[edge_functions]]
+name = "whois-lookup"
+path = "/whois-lookup"
+verify_jwt = false
