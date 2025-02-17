@@ -27,9 +27,15 @@ serve(async (req) => {
       )
     }
 
+    if (!apiKey) {
+      console.error('APILayer API key is not configured')
+      throw new Error('APILayer API key is not configured')
+    }
+
     console.log(`Starting WHOIS lookup for domain: ${domain}`)
     const apiUrl = `https://api.apilayer.com/whois/query?domain=${domain}`
     
+    console.log('Making request to APILayer...')
     const response = await fetch(apiUrl, {
       headers: {
         'apikey': apiKey
@@ -37,12 +43,19 @@ serve(async (req) => {
     })
     
     if (!response.ok) {
+      const errorText = await response.text()
       console.error(`APILayer WHOIS API error: ${response.status} ${response.statusText}`)
-      throw new Error('WHOIS API request failed')
+      console.error('APILayer error response:', errorText)
+      throw new Error(`WHOIS API request failed with status ${response.status}: ${errorText}`)
     }
     
     const data = await response.json()
     console.log('WHOIS API response received successfully')
+
+    if (!data || typeof data !== 'object') {
+      console.error('Invalid response from APILayer:', data)
+      throw new Error('Invalid response from WHOIS API')
+    }
     
     // Transform APILayer response to match our frontend structure with enhanced information
     const transformedData = {
@@ -100,7 +113,11 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in WHOIS lookup:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to fetch WHOIS data', details: error.message }),
+      JSON.stringify({ 
+        error: 'Failed to fetch WHOIS data', 
+        details: error.message,
+        type: error.name
+      }),
       { 
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
