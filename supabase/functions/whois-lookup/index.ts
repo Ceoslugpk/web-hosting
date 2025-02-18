@@ -36,7 +36,6 @@ serve(async (req) => {
     const apiUrl = `https://api.apilayer.com/whois/query?domain=${domain}`
     
     console.log('Making request to APILayer...')
-    console.log('APILayer URL:', apiUrl)
     
     const response = await fetch(apiUrl, {
       headers: {
@@ -53,21 +52,17 @@ serve(async (req) => {
     
     const data = await response.json()
     console.log('WHOIS API response received successfully')
-    console.log('API Response data:', JSON.stringify(data, null, 2))
 
-    if (!data || typeof data !== 'object') {
-      console.error('Invalid response from APILayer:', data)
-      throw new Error('Invalid response from WHOIS API')
-    }
-    
-    // Transform APILayer response to match our frontend structure with enhanced information
+    // Transform APILayer response to match our frontend structure
     const transformedData = {
       WhoisRecord: {
-        domainName: data.domain,
+        domainName: data.domain_name,
         status: Array.isArray(data.status) ? data.status.join(', ') : data.status,
         createdDate: data.created_date,
         updatedDate: data.updated_date,
         expiresDate: data.expiration_date,
+        domain_age: data.domain_age,
+        domain_grace_period: data.domain_grace_period,
         registrar: {
           name: data.registrar,
           ianaId: data.registrar_iana_id,
@@ -98,9 +93,7 @@ serve(async (req) => {
           state: data.registrant_state,
           email: data.registrant_email
         },
-        dnssec: data.dnssec,
-        domain_age: data.domain_age,
-        domain_grace_period: data.domain_grace_period
+        dnssec: data.dnssec
       }
     }
     
