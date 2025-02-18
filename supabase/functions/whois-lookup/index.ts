@@ -39,8 +39,10 @@ serve(async (req) => {
     console.log('APILayer URL:', apiUrl)
     
     const response = await fetch(apiUrl, {
+      method: 'GET',
       headers: {
-        'apikey': apiKey
+        'apikey': apiKey,
+        'Content-Type': 'application/json'
       }
     })
     
