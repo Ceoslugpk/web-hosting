@@ -36,6 +36,7 @@ serve(async (req) => {
     const apiUrl = `https://api.apilayer.com/whois/query?domain=${domain}`
     
     console.log('Making request to APILayer...')
+    console.log('APILayer URL:', apiUrl)
     
     const response = await fetch(apiUrl, {
       headers: {
@@ -51,33 +52,38 @@ serve(async (req) => {
     }
     
     const data = await response.json()
-    console.log('WHOIS API response received successfully')
+    console.log('WHOIS API response received:', data)
+
+    if (!data || typeof data !== 'object') {
+      console.error('Invalid response from APILayer:', data)
+      throw new Error('Invalid response from WHOIS API')
+    }
 
     // Transform APILayer response to match our frontend structure
     const transformedData = {
       WhoisRecord: {
-        domainName: data.domain_name,
-        status: Array.isArray(data.status) ? data.status.join(', ') : data.status,
+        domainName: data.domain,
+        status: data.domain_status || '-',
         createdDate: data.created_date,
         updatedDate: data.updated_date,
-        expiresDate: data.expiration_date,
-        domain_age: data.domain_age,
-        domain_grace_period: data.domain_grace_period,
+        expiresDate: data.registry_expiry_date,
+        domain_age: `${data.domain_age || 0} days`,
+        domain_grace_period: data.registry_grace_period || '-',
         registrar: {
-          name: data.registrar,
+          name: data.registrar_name,
           ianaId: data.registrar_iana_id,
           url: data.registrar_url,
-          email: data.registrar_email,
-          phone: data.registrar_phone
+          email: data.registrar_abuse_contact_email,
+          phone: data.registrar_abuse_contact_phone
         },
         registryData: {
           nameServers: {
-            hostNames: Array.isArray(data.name_servers) ? data.name_servers : [data.name_servers]
+            hostNames: data.name_servers || []
           }
         },
         administrativeContact: {
           organization: data.admin_organization,
-          state: data.admin_state,
+          state: data.admin_state_province,
           country: data.admin_country,
           email: data.admin_email,
           phone: data.admin_phone
@@ -90,12 +96,14 @@ serve(async (req) => {
         registrant: {
           organization: data.registrant_organization,
           country: data.registrant_country,
-          state: data.registrant_state,
+          state: data.registrant_state_province,
           email: data.registrant_email
         },
         dnssec: data.dnssec
       }
     }
+    
+    console.log('Transformed data:', transformedData)
     
     return new Response(
       JSON.stringify(transformedData),
