@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import DomainSearch from "./pages/domains/DomainSearch";
+import DomainExtension from "./pages/domains/DomainExtension";
 import SharedHosting from "./pages/hosting/SharedHosting";
 import WebsiteBuilder from "./pages/WebsiteBuilder";
 import WebSecurity from "./pages/WebSecurity";
@@ -26,6 +27,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/domains/search" element={<DomainSearch />} />
+          <Route path="/domains/:extension" element={<DomainExtension />} />
           <Route path="/hosting/shared" element={<SharedHosting />} />
           <Route path="/website-builder" element={<WebsiteBuilder />} />
           <Route path="/security" element={<WebSecurity />} />

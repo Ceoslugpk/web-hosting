@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, Globe, Server, Settings } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MenuItem {
   title: string;
@@ -21,6 +22,9 @@ interface MegaMenuProps {
 
 export const MegaMenu = ({ title, icon, items }: MegaMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
+
+  if (isMobile) return null;
 
   return (
     <div
@@ -28,7 +32,7 @@ export const MegaMenu = ({ title, icon, items }: MegaMenuProps) => {
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <button className="flex items-center gap-2 px-4 py-2 hover:text-[#4E4FEB] transition-colors">
+      <button className="flex items-center gap-2 px-4 py-2 hover:text-[#4E4FEB] transition-colors whitespace-nowrap">
         {icon && <span className="w-4 h-4">{icon}</span>}
         {title}
         <ChevronDown className="w-4 h-4" />
