@@ -177,14 +177,6 @@ export const MobileMenu = () => {
               
               {renderSubMenu(otherMenu)}
               
-              <Link to="/about" className="block py-2 px-4 border-b border-gray-200 hover:text-[#4E4FEB]" onClick={toggleMenu}>
-                About Us
-              </Link>
-              
-              <Link to="/contact" className="block py-2 px-4 border-b border-gray-200 hover:text-[#4E4FEB]" onClick={toggleMenu}>
-                Contact Us
-              </Link>
-              
               <Link to="/whois" className="block py-2 px-4 border-b border-gray-200 hover:text-[#4E4FEB]" onClick={toggleMenu}>
                 Whois Lookup
               </Link>

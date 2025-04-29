@@ -1,20 +1,18 @@
 
-import { Shield, Lock, Bell } from "lucide-react";
-
 export const SecurityFeatures = () => {
   const features = [
     {
-      icon: Shield,
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "DDoS Protection",
       description: "Advanced protection against DDoS attacks to keep your website safe and running.",
     },
     {
-      icon: Lock,
+      image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "SSL Certificates",
       description: "Free SSL certificates to encrypt data and build trust with your visitors.",
     },
     {
-      icon: Bell,
+      image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "24/7 Monitoring",
       description: "Continuous monitoring of your hosting environment for optimal security.",
     },
@@ -34,14 +32,20 @@ export const SecurityFeatures = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((Feature, index) => (
+          {features.map((feature, index) => (
             <div
               key={index}
               className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
             >
-              <Feature.icon className="w-12 h-12 text-[#4E4FEB] mb-6" />
-              <h4 className="text-xl font-bold text-[#0E2954] mb-4">{Feature.title}</h4>
-              <p className="text-[#2D5087]">{Feature.description}</p>
+              <div className="mb-6 h-40 overflow-hidden rounded-lg">
+                <img 
+                  src={feature.image}
+                  alt={feature.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h4 className="text-xl font-bold text-[#0E2954] mb-4">{feature.title}</h4>
+              <p className="text-[#2D5087]">{feature.description}</p>
             </div>
           ))}
         </div>

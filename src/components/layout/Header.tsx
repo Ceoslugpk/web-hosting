@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
 import { MobileMenu } from "./MobileMenu";
@@ -12,8 +11,6 @@ import {
   Layout,
   Shield,
   Mail,
-  Info,
-  Phone,
   FileSearch
 } from "lucide-react";
 
@@ -174,8 +171,6 @@ export const Header = () => {
           </div>
           
           <nav className="hidden sm:flex items-center space-x-6 font-semibold">
-            <Link to="/about" className="hover:text-opacity-80 transition-colors">About</Link>
-            <Link to="/contact" className="hover:text-opacity-80 transition-colors">Contact</Link>
             <Link to="/sitemap" className="hover:text-opacity-80 transition-colors">Sitemap</Link>
           </nav>
         </div>
@@ -249,16 +244,6 @@ export const Header = () => {
               </Link>
 
               <MegaMenu title="Other" icon={<Settings className="w-5 h-5" />} items={otherMenuItems} />
-
-              <Link to="/about" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
-                <Info className="w-5 h-5" />
-                <span>About Us</span>
-              </Link>
-
-              <Link to="/contact" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
-                <Phone className="w-5 h-5" />
-                <span>Contact Us</span>
-              </Link>
 
               <Link to="/whois" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
                 <FileSearch className="w-5 h-5" />

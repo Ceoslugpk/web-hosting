@@ -1,15 +1,17 @@
 
-import { Server, Shield, Gauge, Clock } from "lucide-react";
-
-const FeatureCard = ({ icon: Icon, title, description }: {
-  icon: typeof Server;
+const FeatureCard = ({ image, title, description }: {
+  image: string;
   title: string;
   description: string;
 }) => {
   return (
     <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-      <div className="w-12 h-12 bg-[#4E4FEB] rounded-lg flex items-center justify-center mb-4">
-        <Icon className="w-6 h-6 text-white" />
+      <div className="mb-4 rounded-lg overflow-hidden h-40">
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover"
+        />
       </div>
       <h3 className="text-xl font-bold text-[#0E2954] mb-2">{title}</h3>
       <p className="text-[#2D5087]">{description}</p>
@@ -20,22 +22,22 @@ const FeatureCard = ({ icon: Icon, title, description }: {
 export const HostingFeatures = () => {
   const features = [
     {
-      icon: Server,
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "99.9% Uptime",
       description: "We guarantee your website will be available 99.9% of the time or better.",
     },
     {
-      icon: Shield,
+      image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "Enhanced Security",
       description: "Advanced security features to protect your website from threats.",
     },
     {
-      icon: Gauge,
+      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "Lightning Fast",
       description: "Optimized servers ensure your website loads quickly for visitors.",
     },
     {
-      icon: Clock,
+      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
       title: "24/7 Support",
       description: "Our expert support team is available around the clock to help you.",
     },

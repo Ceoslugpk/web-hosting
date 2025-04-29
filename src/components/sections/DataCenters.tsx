@@ -1,6 +1,4 @@
 
-import { Globe } from "lucide-react";
-
 export const DataCenters = () => {
   return (
     <section className="py-20 bg-white">
@@ -31,7 +29,11 @@ export const DataCenters = () => {
             </div>
           </div>
           <div className="flex justify-center">
-            <Globe className="w-64 h-64 text-[#4E4FEB]" />
+            <img 
+              src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              alt="World Map" 
+              className="rounded-lg shadow-lg max-h-[400px] object-cover"
+            />
           </div>
         </div>
       </div>
