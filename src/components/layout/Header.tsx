@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 import { MegaMenu } from "../navigation/MegaMenu";
-import { MobileMenu } from "./MobileMenu";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { 
   Globe, 
   Server, 
@@ -11,6 +9,8 @@ import {
   Layout,
   Shield,
   Mail,
+  Info,
+  Phone,
   FileSearch
 } from "lucide-react";
 
@@ -60,7 +60,6 @@ const domainMenuItems = [{
     url: "/domains/ai"
   }]
 }];
-
 const hostingMenuItems = [{
   section: "Web Hosting",
   links: [{
@@ -107,7 +106,6 @@ const hostingMenuItems = [{
     url: "/hosting/email"
   }]
 }];
-
 const otherMenuItems = [{
   section: "Additional Services",
   links: [{
@@ -156,14 +154,8 @@ const otherMenuItems = [{
 }];
 
 export const Header = () => {
-  const isMobile = useIsMobile();
-
-  return (
-    <header className="flex flex-col items-stretch animate-fade-in">
-      <MobileMenu />
-      
+  return <header className="flex flex-col items-stretch animate-fade-in">
       <div className="flex flex-col w-full items-center max-md:max-w-full">
-        {/* Top blue bar */}
         <div className="max-w-[1920px] w-full bg-[#4E4FEB] min-h-[43px] flex items-center justify-between text-white text-sm leading-[21px] px-4 sm:px-6 lg:px-8 xl:px-[250px] py-2 border-y border-[rgba(20,19,19,0.07)]">
           <div className="flex items-center gap-2.5 font-medium">
             <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/69b895529e24bf63369a6f1bd52e7cdcba90f0cc78cba1f99879f757cd256e70" className="aspect-square object-contain w-5" alt="" />
@@ -171,18 +163,19 @@ export const Header = () => {
           </div>
           
           <nav className="hidden sm:flex items-center space-x-6 font-semibold">
+            <Link to="/about" className="hover:text-opacity-80 transition-colors">About</Link>
+            <Link to="/contact" className="hover:text-opacity-80 transition-colors">Contact</Link>
             <Link to="/sitemap" className="hover:text-opacity-80 transition-colors">Sitemap</Link>
           </nav>
         </div>
 
-        {/* Logo and top bar */}
-        <div className="max-w-[1920px] bg-white flex w-full flex-col items-center justify-center px-4 sm:px-[70px] py-5 max-md:max-w-full">
-          <div className="flex w-full max-w-[1415px] items-center gap-5 flex-wrap justify-between max-md:max-w-full">
+        <div className="max-w-[1920px] bg-white flex w-full flex-col items-center justify-center px-[70px] py-5 max-md:max-w-full max-md:px-5">
+          <div className="flex w-full max-w-[1415px] items-stretch gap-5 flex-wrap justify-between max-md:max-w-full">
             <Link to="/" className="flex flex-col items-stretch justify-center">
               <img loading="lazy" srcSet="https://cdn.builder.io/api/v1/image/assets/a67d4ee98ae74409993f1da3b110b2f6/2a2325cca4c2bc859d40fdad368f115019782c5a1b2e1aed92c3aea24f7e9bad" className="aspect-[3.42] object-contain w-[171px] max-w-full" alt="GoHost Logo" />
             </Link>
 
-            <div className="hidden md:flex items-stretch gap-[40px_49px] flex-wrap max-md:max-w-full">
+            <div className="flex items-stretch gap-[40px_49px] flex-wrap max-md:max-w-full">
               <div className="flex items-stretch gap-[18px] text-sm text-[#0E2954] font-semibold capitalize leading-[21px] grow shrink basis-auto">
                 <div className="flex flex-col overflow-hidden items-stretch justify-center my-auto">
                   <div className="flex min-h-[21px] items-center justify-center">
@@ -216,11 +209,10 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block max-w-[1920px] w-full border-y border-[rgba(20,19,19,0.07)] bg-white max-md:max-w-full mx-0 py-[5px] px-4 lg:px-[132px]">
-          <div className="flex items-center justify-between w-full overflow-x-auto">
-            <div className="flex items-center gap-4 lg:gap-8">
-              <Link to="/" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
+        <nav className="max-w-[1920px] justify-between items-center bg-white w-full border-y border-[rgba(20,19,19,0.07)] max-md:max-w-full mx-0 py-[5px] px-[132px]">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-8">
+              <Link to="/" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
                 <Home className="w-5 h-5" />
                 <span>Home</span>
               </Link>
@@ -228,30 +220,40 @@ export const Header = () => {
               <MegaMenu title="Domains" icon={<Globe className="w-5 h-5" />} items={domainMenuItems} />
               <MegaMenu title="Hosting" icon={<Server className="w-5 h-5" />} items={hostingMenuItems} />
 
-              <Link to="/website-builder" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
+              <Link to="/website-builder" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
                 <Layout className="w-5 h-5" />
                 <span>Website Builder</span>
               </Link>
 
-              <Link to="/security" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
+              <Link to="/security" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
                 <Shield className="w-5 h-5" />
                 <span>Web Security</span>
               </Link>
 
-              <Link to="/email" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
+              <Link to="/email" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
                 <Mail className="w-5 h-5" />
                 <span>Email</span>
               </Link>
 
               <MegaMenu title="Other" icon={<Settings className="w-5 h-5" />} items={otherMenuItems} />
 
-              <Link to="/whois" className="hover:text-[#4E4FEB] transition-colors px-2 py-2 lg:px-4 flex items-center gap-2 whitespace-nowrap">
+              <Link to="/about" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                <span>About Us</span>
+              </Link>
+
+              <Link to="/contact" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
+                <Phone className="w-5 h-5" />
+                <span>Contact Us</span>
+              </Link>
+
+              <Link to="/whois" className="hover:text-[#4E4FEB] transition-colors px-4 py-2 flex items-center gap-2">
                 <FileSearch className="w-5 h-5" />
                 <span>Whois Lookup</span>
               </Link>
             </div>
 
-            <div className="hidden lg:flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <Search className="w-[18px] h-[18px] text-[#0E2954]" />
               <span className="text-[#0E2954] hover:text-[#4E4FEB] transition-colors cursor-pointer">
                 Register a New Domain
@@ -260,6 +262,5 @@ export const Header = () => {
           </div>
         </nav>
       </div>
-    </header>
-  );
+    </header>;
 };
