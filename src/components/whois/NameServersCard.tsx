@@ -19,9 +19,13 @@ export const NameServersCard = ({ nameServers }: NameServersCardProps) => {
       </CardHeader>
       <CardContent>
         <ul className="space-y-1">
-          {nameServers?.hostNames?.filter(Boolean).map((ns: string, index: number) => (
-            <li key={index} className="text-[#2D5087]">{ns}</li>
-          )) || <li>-</li>}
+          {nameServers?.hostNames?.length > 0 ? (
+            nameServers.hostNames.map((ns: string, index: number) => (
+              <li key={index} className="text-[#2D5087]">{ns}</li>
+            ))
+          ) : (
+            <li className="text-[#2D5087]">No nameservers found</li>
+          )}
         </ul>
       </CardContent>
     </Card>

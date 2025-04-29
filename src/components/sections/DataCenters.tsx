@@ -1,5 +1,5 @@
 
-import { Globe } from "lucide-react";
+import React from "react";
 
 export const DataCenters = () => {
   return (
@@ -31,7 +31,11 @@ export const DataCenters = () => {
             </div>
           </div>
           <div className="flex justify-center">
-            <Globe className="w-64 h-64 text-[#4E4FEB]" />
+            <img 
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+              alt="Global Network" 
+              className="w-full max-w-md rounded-lg shadow-lg"
+            />
           </div>
         </div>
       </div>

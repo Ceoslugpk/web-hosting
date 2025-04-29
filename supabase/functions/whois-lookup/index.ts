@@ -15,7 +15,6 @@ serve(async (req) => {
 
   try {
     const { domain } = await req.json()
-    const apiKey = Deno.env.get('APILAYER_API_KEY')
 
     if (!domain) {
       return new Response(
@@ -27,75 +26,101 @@ serve(async (req) => {
       )
     }
 
-    if (!apiKey) {
-      console.error('APILayer API key is not configured')
-      throw new Error('APILayer API key is not configured')
-    }
-
     console.log(`Starting WHOIS lookup for domain: ${domain}`)
-    const apiUrl = `https://api.apilayer.com/whois/query?domain=${domain}`
     
-    console.log('Making request to APILayer...')
+    // Using the free rdap.org API
+    const apiUrl = `https://www.rdap.org/domain/${domain}`;
     
-    const response = await fetch(apiUrl, {
-      headers: {
-        'apikey': apiKey
-      }
-    })
+    console.log('Making request to RDAP API...')
+    
+    const response = await fetch(apiUrl);
     
     if (!response.ok) {
-      const errorText = await response.text()
-      console.error(`APILayer WHOIS API error: ${response.status} ${response.statusText}`)
-      console.error('APILayer error response:', errorText)
-      throw new Error(`WHOIS API request failed with status ${response.status}: ${errorText}`)
+      const errorText = await response.text();
+      console.error(`RDAP API error: ${response.status} ${response.statusText}`);
+      console.error('RDAP error response:', errorText);
+      throw new Error(`WHOIS API request failed with status ${response.status}: ${errorText}`);
     }
     
-    const data = await response.json()
-    console.log('WHOIS API response received successfully')
+    const data = await response.json();
+    console.log('WHOIS API response received successfully');
 
-    // Transform APILayer response to match our frontend structure
+    // Transform RDAP response to match our frontend structure
+    // Extract relevant registration information
+    const events = data.events || [];
+    const entities = data.entities || [];
+    
+    let registrar = {};
+    let admin = {};
+    let technical = {};
+    let registrant = {};
+    
+    // Extract entity information
+    entities.forEach(entity => {
+      if (entity.roles.includes('registrar')) {
+        registrar = {
+          name: entity.publicIds?.[0]?.identifier || entity.handle || 'Unknown',
+          ianaId: entity.publicIds?.[0]?.type === 'IANA' ? entity.publicIds[0].identifier : '',
+          url: entity.vcardArray?.[1]?.find(v => v[0] === 'url')?.[3] || '',
+          email: entity.vcardArray?.[1]?.find(v => v[0] === 'email')?.[3] || '',
+          phone: entity.vcardArray?.[1]?.find(v => v[0] === 'tel')?.[3] || ''
+        };
+      }
+      
+      if (entity.roles.includes('administrative')) {
+        admin = {
+          organization: entity.vcardArray?.[1]?.find(v => v[0] === 'org')?.[3] || '',
+          email: entity.vcardArray?.[1]?.find(v => v[0] === 'email')?.[3] || '',
+          phone: entity.vcardArray?.[1]?.find(v => v[0] === 'tel')?.[3] || ''
+        };
+      }
+      
+      if (entity.roles.includes('technical')) {
+        technical = {
+          organization: entity.vcardArray?.[1]?.find(v => v[0] === 'org')?.[3] || '',
+          email: entity.vcardArray?.[1]?.find(v => v[0] === 'email')?.[3] || '',
+          phone: entity.vcardArray?.[1]?.find(v => v[0] === 'tel')?.[3] || ''
+        };
+      }
+      
+      if (entity.roles.includes('registrant')) {
+        registrant = {
+          organization: entity.vcardArray?.[1]?.find(v => v[0] === 'org')?.[3] || '',
+          email: entity.vcardArray?.[1]?.find(v => v[0] === 'email')?.[3] || ''
+        };
+      }
+    });
+    
+    // Find event dates
+    const createdEvent = events.find(e => e.eventAction === 'registration');
+    const updatedEvent = events.find(e => e.eventAction === 'last changed');
+    const expiresEvent = events.find(e => e.eventAction === 'expiration');
+    
+    // Extract nameservers
+    const nameServers = data.nameservers?.map(ns => ns.ldhName) || [];
+    
+    // Build transformed data structure
     const transformedData = {
       WhoisRecord: {
-        domainName: data.domain_name,
-        status: Array.isArray(data.status) ? data.status.join(', ') : data.status,
-        createdDate: data.created_date,
-        updatedDate: data.updated_date,
-        expiresDate: data.expiration_date,
-        domain_age: data.domain_age,
-        domain_grace_period: data.domain_grace_period,
-        registrar: {
-          name: data.registrar,
-          ianaId: data.registrar_iana_id,
-          url: data.registrar_url,
-          email: data.registrar_email,
-          phone: data.registrar_phone
-        },
+        domainName: data.ldhName || domain,
+        status: Array.isArray(data.status) ? data.status.join(', ') : (data.status || 'Unknown'),
+        createdDate: createdEvent?.eventDate || '',
+        updatedDate: updatedEvent?.eventDate || '',
+        expiresDate: expiresEvent?.eventDate || '',
+        domain_age: 'Not available',
+        domain_grace_period: 'Not available',
+        registrar: registrar,
         registryData: {
           nameServers: {
-            hostNames: Array.isArray(data.name_servers) ? data.name_servers : [data.name_servers]
+            hostNames: nameServers
           }
         },
-        administrativeContact: {
-          organization: data.admin_organization,
-          state: data.admin_state,
-          country: data.admin_country,
-          email: data.admin_email,
-          phone: data.admin_phone
-        },
-        technicalContact: {
-          organization: data.tech_organization,
-          email: data.tech_email,
-          phone: data.tech_phone
-        },
-        registrant: {
-          organization: data.registrant_organization,
-          country: data.registrant_country,
-          state: data.registrant_state,
-          email: data.registrant_email
-        },
-        dnssec: data.dnssec
+        administrativeContact: admin,
+        technicalContact: technical,
+        registrant: registrant,
+        dnssec: data.secureDNS?.delegationSigned ? 'signed' : 'unsigned'
       }
-    }
+    };
     
     return new Response(
       JSON.stringify(transformedData),
@@ -105,9 +130,9 @@ serve(async (req) => {
           'Content-Type': 'application/json'
         } 
       }
-    )
+    );
   } catch (error) {
-    console.error('Error in WHOIS lookup:', error)
+    console.error('Error in WHOIS lookup:', error);
     return new Response(
       JSON.stringify({ 
         error: 'Failed to fetch WHOIS data', 
@@ -118,6 +143,6 @@ serve(async (req) => {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
-    )
+    );
   }
 })
