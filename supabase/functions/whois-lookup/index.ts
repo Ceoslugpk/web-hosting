@@ -28,60 +28,134 @@ serve(async (req) => {
 
     console.log(`Starting WHOIS lookup for domain: ${domain}`)
     
-    // Using the WhoisJSON API which is more reliable for edge functions
-    const apiUrl = `https://whoisjson.com/api/v1/whois?domain=${domain}`;
+    // Using the RDAP API which is free and reliable
+    const apiUrl = `https://rdap.org/domain/${domain}`;
     
-    console.log('Making request to WhoisJSON API...')
+    console.log(`Making request to RDAP API: ${apiUrl}`)
     
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`WhoisJSON API error: ${response.status} ${response.statusText}`);
-      console.error('WhoisJSON error response:', errorText);
+      console.error(`RDAP API error: ${response.status} ${response.statusText}`);
+      console.error('RDAP error response:', errorText);
       throw new Error(`WHOIS API request failed with status ${response.status}: ${errorText}`);
     }
     
-    const data = await response.json();
-    console.log('WHOIS API response received successfully');
-
-    // Transform WhoisJSON response to match our frontend structure
+    const rdapData = await response.json();
+    console.log('RDAP API response received successfully');
+    
+    // Transform RDAP response to match our frontend structure
+    const nameServers = rdapData.nameservers?.map(ns => ns.ldhName) || [];
+    
+    // Extract dates from events array
+    const events = rdapData.events || [];
+    let createdDate = '';
+    let updatedDate = '';
+    let expiresDate = '';
+    
+    for (const event of events) {
+      if (event.eventAction === 'registration') {
+        createdDate = event.eventDate;
+      } else if (event.eventAction === 'last changed') {
+        updatedDate = event.eventDate;
+      } else if (event.eventAction === 'expiration') {
+        expiresDate = event.eventDate;
+      }
+    }
+    
+    // Extract registrar info
+    let registrarName = 'Unknown';
+    let registrarUrl = '';
+    let registrarEmail = '';
+    let registrarPhone = '';
+    
+    if (rdapData.entities && rdapData.entities.length > 0) {
+      for (const entity of rdapData.entities) {
+        if (entity.roles && entity.roles.includes('registrar')) {
+          registrarName = entity.vcardArray?.[1]?.find(vcard => vcard[0] === 'fn')?.[3] || entity.handle || 'Unknown';
+          
+          // Extract contact info
+          if (entity.vcardArray && entity.vcardArray.length > 1) {
+            for (const vcard of entity.vcardArray[1]) {
+              if (vcard[0] === 'url') {
+                registrarUrl = vcard[3] || '';
+              } else if (vcard[0] === 'email') {
+                registrarEmail = vcard[3] || '';
+              } else if (vcard[0] === 'tel') {
+                registrarPhone = vcard[3] || '';
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+    
+    // Extract other contact information
+    const contacts = {
+      administrative: { organization: '', email: '', phone: '' },
+      technical: { organization: '', email: '', phone: '' },
+      registrant: { organization: '', email: '' }
+    };
+    
+    if (rdapData.entities) {
+      for (const entity of rdapData.entities) {
+        if (!entity.roles || !entity.vcardArray) continue;
+        
+        let contactType = null;
+        if (entity.roles.includes('administrative')) {
+          contactType = 'administrative';
+        } else if (entity.roles.includes('technical')) {
+          contactType = 'technical';
+        } else if (entity.roles.includes('registrant')) {
+          contactType = 'registrant';
+        }
+        
+        if (contactType) {
+          const vcardData = entity.vcardArray[1] || [];
+          for (const vcard of vcardData) {
+            if (vcard[0] === 'org') {
+              contacts[contactType].organization = vcard[3] || '';
+            } else if (vcard[0] === 'email') {
+              contacts[contactType].email = vcard[3] || '';
+            } else if (vcard[0] === 'tel') {
+              contacts[contactType].phone = vcard[3] || '';
+            }
+          }
+        }
+      }
+    }
+    
     const transformedData = {
       WhoisRecord: {
-        domainName: data.domain || domain,
-        status: data.status || 'Unknown',
-        createdDate: data.created_date || '',
-        updatedDate: data.updated_date || '',
-        expiresDate: data.expiration_date || '',
-        domain_age: data.domain_age || 'Not available',
-        domain_grace_period: data.grace_period || 'Not available',
+        domainName: rdapData.ldhName || domain,
+        status: Array.isArray(rdapData.status) ? rdapData.status.join(', ') : 'Unknown',
+        createdDate,
+        updatedDate,
+        expiresDate,
+        domain_age: calculateDomainAge(createdDate),
+        domain_grace_period: '45 days',  // Default value, RDAP doesn't provide this
         registrar: {
-          name: data.registrar?.name || 'Unknown',
-          ianaId: data.registrar?.iana_id || '',
-          url: data.registrar?.url || '',
-          email: data.registrar?.email || '',
-          phone: data.registrar?.phone || ''
+          name: registrarName,
+          ianaId: '',  // RDAP doesn't provide this
+          url: registrarUrl,
+          email: registrarEmail,
+          phone: registrarPhone
         },
         registryData: {
           nameServers: {
-            hostNames: data.nameservers || []
+            hostNames: nameServers
           }
         },
-        administrativeContact: {
-          organization: data.admin?.organization || '',
-          email: data.admin?.email || '',
-          phone: data.admin?.phone || ''
-        },
-        technicalContact: {
-          organization: data.tech?.organization || '',
-          email: data.tech?.email || '',
-          phone: data.tech?.phone || ''
-        },
-        registrant: {
-          organization: data.registrant?.organization || '',
-          email: data.registrant?.email || ''
-        },
-        dnssec: data.dnssec || 'unsigned'
+        administrativeContact: contacts.administrative,
+        technicalContact: contacts.technical,
+        registrant: contacts.registrant,
+        dnssec: rdapData.secureDNS?.delegationSigned ? 'signed' : 'unsigned'
       }
     };
     
@@ -150,3 +224,26 @@ serve(async (req) => {
     );
   }
 })
+
+// Helper function to calculate domain age from creation date
+function calculateDomainAge(createdDateStr) {
+  if (!createdDateStr) return 'Not available';
+  
+  try {
+    const createdDate = new Date(createdDateStr);
+    const currentDate = new Date();
+    
+    const ageInMs = currentDate - createdDate;
+    const ageInYears = ageInMs / (1000 * 60 * 60 * 24 * 365.25);
+    
+    if (ageInYears < 1) {
+      const ageInMonths = Math.floor(ageInYears * 12);
+      return `${ageInMonths} month${ageInMonths !== 1 ? 's' : ''}`;
+    } else {
+      const years = Math.floor(ageInYears);
+      return `${years} year${years !== 1 ? 's' : ''}`;
+    }
+  } catch (e) {
+    return 'Not available';
+  }
+}
