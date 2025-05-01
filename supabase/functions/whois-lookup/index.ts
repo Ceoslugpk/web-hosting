@@ -73,11 +73,13 @@ serve(async (req) => {
     let registrarUrl = '';
     let registrarEmail = '';
     let registrarPhone = '';
+    let registrarIanaId = '';
     
     if (rdapData.entities && rdapData.entities.length > 0) {
       for (const entity of rdapData.entities) {
         if (entity.roles && entity.roles.includes('registrar')) {
           registrarName = entity.vcardArray?.[1]?.find(vcard => vcard[0] === 'fn')?.[3] || entity.handle || 'Unknown';
+          registrarIanaId = entity.publicIds?.find(id => id.type === 'IANA Registrar ID')?.identifier || '';
           
           // Extract contact info
           if (entity.vcardArray && entity.vcardArray.length > 1) {
@@ -96,11 +98,11 @@ serve(async (req) => {
       }
     }
     
-    // Extract other contact information
+    // Extract contact information with more detailed approach
     const contacts = {
-      administrative: { organization: '', email: '', phone: '' },
-      technical: { organization: '', email: '', phone: '' },
-      registrant: { organization: '', email: '' }
+      administrative: { organization: '', email: '', phone: '', country: '', state: '' },
+      technical: { organization: '', email: '', phone: '', country: '', state: '' },
+      registrant: { organization: '', email: '', phone: '', country: '', state: '' }
     };
     
     if (rdapData.entities) {
@@ -125,9 +127,25 @@ serve(async (req) => {
               contacts[contactType].email = vcard[3] || '';
             } else if (vcard[0] === 'tel') {
               contacts[contactType].phone = vcard[3] || '';
+            } else if (vcard[0] === 'adr') {
+              // Address format can vary, typically contains: PO Box, extended address, street, locality, region, postal code, country
+              if (Array.isArray(vcard[3]) && vcard[3].length >= 7) {
+                contacts[contactType].state = vcard[3][4] || '';
+                contacts[contactType].country = vcard[3][6] || '';
+              }
             }
           }
         }
+      }
+    }
+    
+    // Determine DNSSEC status more accurately
+    let dnssec = 'unsigned';
+    if (rdapData.secureDNS) {
+      if (rdapData.secureDNS.delegationSigned === true) {
+        dnssec = 'signed';
+      } else if (rdapData.secureDNS.delegationSigned === false) {
+        dnssec = 'unsigned';
       }
     }
     
@@ -142,7 +160,7 @@ serve(async (req) => {
         domain_grace_period: '45 days',  // Default value, RDAP doesn't provide this
         registrar: {
           name: registrarName,
-          ianaId: '',  // RDAP doesn't provide this
+          ianaId: registrarIanaId,
           url: registrarUrl,
           email: registrarEmail,
           phone: registrarPhone
@@ -155,7 +173,7 @@ serve(async (req) => {
         administrativeContact: contacts.administrative,
         technicalContact: contacts.technical,
         registrant: contacts.registrant,
-        dnssec: rdapData.secureDNS?.delegationSigned ? 'signed' : 'unsigned'
+        dnssec: dnssec
       }
     };
     
@@ -198,16 +216,23 @@ serve(async (req) => {
         administrativeContact: {
           organization: "Example Organization",
           email: "admin@example.com",
-          phone: "+1.5555555556"
+          phone: "+1.5555555556",
+          country: "United States",
+          state: "California"
         },
         technicalContact: {
           organization: "Example Tech Team",
           email: "tech@example.com",
-          phone: "+1.5555555557"
+          phone: "+1.5555555557",
+          country: "United States",
+          state: "California"
         },
         registrant: {
           organization: "Example Owner Corp",
-          email: "owner@example.com"
+          email: "owner@example.com",
+          phone: "+1.5555555558",
+          country: "United States",
+          state: "California"
         },
         dnssec: "unsigned"
       }

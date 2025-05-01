@@ -19,7 +19,7 @@ interface ContactCardProps {
 }
 
 export const ContactCard = ({ title, icon: Icon, contact, getValueOrDash, showState = true }: ContactCardProps) => {
-  const hasData = contact && Object.keys(contact).length > 0;
+  const hasData = contact && Object.values(contact).some(value => value && value !== '');
 
   return (
     <Card>
@@ -39,7 +39,7 @@ export const ContactCard = ({ title, icon: Icon, contact, getValueOrDash, showSt
             <p><span className="font-medium">Phone:</span> {getValueOrDash(contact.phone)}</p>
           </>
         ) : (
-          <p className="text-gray-500">Contact information is private</p>
+          <p className="text-gray-500">Contact information is private or not available</p>
         )}
       </CardContent>
     </Card>

@@ -29,7 +29,7 @@ export const NameServersCard = ({ nameServers }: NameServersCardProps) => {
               <li key={index} className="text-[#2D5087]">{ns}</li>
             ))
           ) : (
-            <li className="text-[#2D5087]">No nameservers found</li>
+            <li className="text-gray-500">No nameservers found</li>
           )}
         </ul>
       </CardContent>
